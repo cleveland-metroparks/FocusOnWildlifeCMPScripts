@@ -11,11 +11,10 @@ datasets that can then be used for analysis.
 ## Notes from Ali Swanson on how to get started duplicating the aggregate report
 
 * Brooke has some code at 
-  * https://github.com/zooniverse/Data-digging/blob/master/example_scripts/wildwatch_kenya/aggregate_survey.py 
-  * that runs basic aggregation on the raw data. 
+  * [Code for running basic aggregation on the raw data](https://github.com/zooniverse/Data-digging/blob/master/example_scripts/wildwatch_kenya/aggregate_survey.py) 
+  * imports two scripts from the main `Data-digging` directory 
 
-* The official aggregation approach and code for Snapshot Serengeti (e.g. www.nature.com/articles/sdata201526) is here:
-  * https://github.com/mkosmala/SnapshotSerengetiScripts
+* The official aggregation approach and code for Snapshot Serengeti (e.g. www.nature.com/articles/sdata201526) is [here](https://github.com/mkosmala/SnapshotSerengetiScripts)
 
 * The Oxford team is working to fix aggregation through the project builder - I'm hopeful we might be able to have something built this summer, but there are no guarantees.
 
