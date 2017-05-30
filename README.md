@@ -1,4 +1,4 @@
-# FocusOnWildlifeCMPScripts
+# Focus On Wildlife CMP Scripts
 
 Scripts for processing Focus On Wildlife -- Cleveland Metroparks classification data
 
