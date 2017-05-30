@@ -1,6 +1,8 @@
 Classification processing README
 --------------------------------
 
+Forked from similar scripts at Snapshot Serengeti (https://github.com/mkosmala/SnapshotSerengetiScripts)
+
 Zooniverse offers a huge file for download which includes all 
 classifications ever made. Before running these scripts, make sure 
 that all tutorial classifications have been removed. Also remove all 
