@@ -4,34 +4,37 @@ import ujson
 import datetime
 from ast import literal_eval
 from get_workflow_info import get_workflow_info, translate_non_alphanumerics, get_short_slug
-from aggregate_question_utils import breakout_anno, getfrac, aggregate_questions, write_class_row
+from aggregate_question_utils import breakout_anno_survey, getfrac, aggregate_questions, write_class_row
 
-classfile      = 'wildwatch-kenya-classifications_test.csv'
-workflow_file  = 'wildwatch-kenya-workflows.csv'
-workflow_cfile = 'wildwatch-kenya-workflow_contents.csv'
+datadir        =   'C:\Users\pdl\Documents\GitHub\FocusOnWildlifeCMPScripts'
+classfile      = 'focus-on-wildlife-cleveland-metroparks-classifications_test.csv'
+workflow_file  = 'focus-on-wildlife-cleveland-metroparks-workflows.csv'
+workflow_cfile = 'focus-on-wildlife-cleveland-metroparks-workflow_contents.csv'
 
-workflow_id = 2030
-workflow_version = "301.76"
+workflow_id = 1432
+workflow_version = "478.99"
 
 annofile     = classfile.replace('.csv', '_annotations_1lineeach.csv')
 outfile      = classfile.replace('.csv', '_aggregated.csv')
 outfile_huge = classfile.replace('.csv', '_aggregated_kitchensink.csv')
 
-
+# Entering python aggregate_survey.py 'default' should allow use of defaults
 try:
-    classfile = sys.argv[1]
+    if len(sys.argv) > 1
+        if sys.argv != "default"
+            classfile = sys.argv[1]
 except:
-    print("Usage:\n%s classfile\n  example classifications export file: %s\n" % (sys.argv[0], classfile))
-    print("Optional inputs:")
-    print("  workflows=projectname-workflows.csv (export from project builder)")
-    print("  workflow_contents=projectname-workflow_contents.csv (export from project builder)")
-    print("  workflow_id=N")
-    print("  workflow_version=N  (looks like a number with format: major.minor)")
-    print("  outfile_class=filename.csv\n    file to save exploded classifications with 1 annotation per row")
-    print("  outfile_agg=filename.csv\n    file to save aggregated classifications")
-    print("    If you don't specify an outfile_class or outfile_agg, the filenames\n    will be based on the input classfile name.")
-    print("    If you vary the project from the suggested one above, you'll need to specify workflow files.\n")
-    exit(0)
+   print("Usage:\n%s classfile\n  example classifications export file: %s\n" % (sys.argv[0], classfile))
+   print("Optional inputs:")
+   print("  workflows=projectname-workflows.csv (export from project builder)")
+   print("  workflow_contents=projectname-workflow_contents.csv (export from project builder)")
+   print("  workflow_id=N")
+   print("  workflow_version=N  (looks like a number with format: major.minor)")
+   print("  outfile_class=filename.csv\n    file to save exploded classifications with 1 annotation per row")
+   print("  outfile_agg=filename.csv\n    file to save aggregated classifications")
+   print("    If you don't specify an outfile_class or outfile_agg, the filenames\n    will be based on the input classfile name.")
+   print("    If you vary the project from the suggested one above, you'll need to specify workflow files.\n")
+   sys.exit(0)
 
 # check for other command-line arguments
 if len(sys.argv) > 2:
@@ -65,7 +68,7 @@ if classfile == annofile:
 if   outfile == annofile:
     outfile  = classfile + '_aggregated.csv'
 
-workflow_df  = pd.read_csv(workflow_file)
+workflow_df  = pd.read_csv(os.path.join(datadir,workflow_file))
 workflow_cdf = pd.read_csv(workflow_cfile)
 workflow_info = get_workflow_info(workflow_df, workflow_cdf, workflow_id, workflow_version)
 

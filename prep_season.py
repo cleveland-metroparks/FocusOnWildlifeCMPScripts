@@ -12,30 +12,47 @@
 # 'season_<number>_hashes.csv' containing anonymized user
 # names.
 #
-# Usage: rep_season.py <number> <infile>
+# Usage: prep_season.py <number> <infile>
 # <number> is the season number
 # <infile> is a comma-separated value flat file as dumped
 #           from the Zooniverse database.
 # 
 # Input and output file fields:
-#    classification_id
-#    user_hash
-#    subject_zooniverse_id
-#    capture_event_id
-#    created_at_time
-#    retire_reason
-#    season
-#    site
-#    roll
-#    filenames
-#    species
-#    species_count
-#    standing
-#    resting
-#    moving
-#    eating
-#    interacting
-#    babies
+#  Snapshot Serengheti
+#    0  classification_id
+#    1  user_hash
+#    2  subject_zooniverse_id
+#    3  capture_event_id
+#    4  created_at_time
+#    5  retire_reason
+#    6  season
+#    7  site
+#    8  roll
+#    9  filenames
+#    10 species
+#    11 species_count
+#    12 standing
+#    13 resting
+#    14 moving
+#    15 eating
+#    16 interacting
+#    17 babies
+#
+#  Focus on Wildlife input
+#    0  classification_id
+#    1  user_name
+#    2  user_id
+#    3  user_ip
+#    4  workflow_id
+#    5  workflow_name
+#    6  workflow_version
+#    7  created_at
+#    8  gold_standard
+#    9  expert
+#    10 metadata
+#    11 annotations
+#    12 subject_data
+#    13 subject_ids
 #
 # Copyright (C) 2015  Margaret Kosmala (mkosmala@gmail.com)
 #

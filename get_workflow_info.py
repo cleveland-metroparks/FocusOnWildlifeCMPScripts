@@ -477,8 +477,8 @@ def translate_non_alphanumerics(to_translate, translate_to=u'_'):
 
 def get_short_slug(thestr):
     qq = (translate_non_alphanumerics(thestr, translate_to=u'')).replace('\n', '_').replace(' ', '_').replace('__', '_').replace('__', '_')
-    if len(qq) > maxlength:
-        ii = (maxlength-2)/2
+    if len(qq) > 35:
+        ii = (35-2)/2
         qr = qq[:ii]+'__'+qq[-ii:]
     else:
         qr = qq
