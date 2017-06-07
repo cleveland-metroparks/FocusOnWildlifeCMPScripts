@@ -1,0 +1,203 @@
+---
+title: "ClassificationProcessing"
+author: "Pat Lorch"
+date: "June 6, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Classification processing
+
+We need to "jail break" the jason fields to get data for summarizing and further processing classifications.
+
+Zooniverse was developing an engine for doing this on the database.  It was in beta, but they have stopped supporting it.  We should probably develop a way to do this in postgres, so we can either dump a classification report and have a veiw that updates the view of a flatter table and or reports with consensus stats, etc.
+
+## Get data, take test subset, load libraries
+
+```{r classification}
+focus_on_wildlife_cleveland_metroparks_classifications_test= read_csv("~/GitHub/FocusOnWildlifeCMPScripts/focus-on-wildlife-cleveland-metroparks-classifications_test.csv")
+# Get first 100 rows to work with
+fowcmp_class_test100=focus_on_wildlife_cleveland_metroparks_classifications_test[1:100,]
+
+library(tidyjson)
+library(magrittr)
+library(ggplot2)
+require(dplyr)
+#require(jsonlite)
+
+```
+
+## Testing TidyJson
+
+Details for TidyJason are here:
+<https://cran.r-project.org/web/packages/tidyjson/vignettes/introduction-to-tidyjson.html>
+
+### Annotation json structure
+
+* We are currently not using answers or filters
+* Answers varies with question type, which depend on choice
+
+Structure:
+```
+[
+    {
+        "task": "T1",
+        "value": [
+            {
+                "choice": "DEER",
+                "answers": {
+                    "ADULTANTLERLESS": "1",
+                    "BEHAVIORCHECKALLTHATAPPLY": [
+                        "STANDING"
+                    ]
+                },
+                "filters": {
+
+                }
+            }
+        ]
+    }
+]
+```
+
+```{r annotation}
+# Look at structure
+t_row=fowcmp_class_test100[7,]
+t_annotation=t_row["annotations"]
+
+t_annotation %>% prettify
+
+# This will add the choice and answers to the table from the annotations field
+t_json.jb=t_row %>% as.tbl_json(json.column = "annotations") %>%
+  gather_array %>%
+  spread_values(task=jstring("task")) %>%
+  enter_object("value") %>% gather_array %>%
+  spread_values(
+    choice=jstring("choice"),
+    answers=jstring("answers")
+  )
+
+t_json.jb
+attr(t_json.jb,'JSON')
+```
+
+### Subject_data json structure
+
+* This one is tougher to parse since it starts with a bald key without a name
+
+Structure:
+```
+{
+    "5054754": {
+        "retired": {
+            "id": 3345492,
+            "workflow_id": 1432,
+            "classifications_count": 7,
+            "created_at": "2017-01-01T02:35:37.051Z",
+            "updated_at": "2017-01-07T21:07:48.640Z",
+            "retired_at": "2017-01-07T21:07:48.638Z",
+            "subject_id": 5054754,
+            "retirement_reason": "consensus"
+        },
+        "ID": "422",
+        "#Image 1": "7thCheckJuly2016_5_RR1106a_101EK113__20160708__15_44__01261.jpg",
+        "#Image 2": "7thCheckJuly2016_5_RR1106a_101EK113__20160708__15_44__01262.jpg",
+        "#Image 3": "7thCheckJuly2016_5_RR1106a_101EK113__20160708__15_44__01263.jpg"
+    }
+}
+```
+
+```{r subject_data}
+# Look at structure
+t_row=fowcmp_class_test100[7,]
+t_annotation2=t_row["subject_data"]
+
+t_annotation2 %>% prettify
+
+# This will add the subject data
+t_json.jb2=t_row %>% as.tbl_json(json.column = "subject_data") %>%
+  gather_keys %>%
+  spread_values(
+    image_ID=jstring("ID"),
+    Image_1=jstring("#Image 1"),
+    Image_2=jstring("#Image 2"),
+    Image_3=jstring("#Image 3")) %>%
+  enter_object("retired") %>%
+    spread_values(
+      retired_id=jstring("id"),
+      anno_workflow_id=jstring("workflow_id"),
+      classifications_count=jstring("classifications_count"),
+      anno_created_at=jstring("created_at"),
+      anno_updated_at=jstring("updated_at"),
+      retired_at=jstring("retired_at"),
+      subject_id=jstring("subject_id"),
+      retirement_reason=jstring("retirement_reason")
+    )
+
+t_json.jb2
+attr(t_json.jb2,'JSON')
+```
+
+### Testing if two as.tbl_json calls can be in one workflow
+
+```{r combine}
+t_row=fowcmp_class_test100[7,]
+
+t_json.jb3=t_row %>% as.tbl_json(json.column = "annotations") %>%
+  gather_array %>%
+  spread_values(task=jstring("task")) %>%
+  as.tbl_json(json.column = "subject_data") %>%
+  gather_keys %>%
+  spread_values(
+    image_ID=jstring("ID"))
+
+t_json.jb3
+attr(t_json.jb3,'JSON')
+```
+
+This fails and gives a second row. Need to do this as a 2 step process.
+
+
+
+## Flatten classification report in two steps
+
+```{r}
+# Replace this with the latest classification report
+fowcmp_class=fowcmp_class_test100
+
+json.jb.anno=fowcmp_class %>% as.tbl_json(json.column = "annotations") %>%
+  gather_array %>%
+  spread_values(task=jstring("task")) %>%
+  enter_object("value") %>% gather_array %>%
+  spread_values(
+    choice=jstring("choice"),
+    answers=jstring("answers")
+  )
+json.jb.anno.df=as.data.frame(json.jb.anno)
+
+json.jb.flat=json.jb.anno.df %>% as.tbl_json(json.column = "subject_data") %>%
+  gather_keys %>%
+  spread_values(
+    image_ID=jstring("ID"),
+    Image_1=jstring("#Image 1"),
+    Image_2=jstring("#Image 2"),
+    Image_3=jstring("#Image 3")
+  ) %>%
+  enter_object("retired") %>%
+    spread_values(
+      retired_id=jstring("id"),
+      anno_workflow_id=jstring("workflow_id"),
+      classifications_count=jstring("classifications_count"),
+      anno_created_at=jstring("created_at"),
+      anno_updated_at=jstring("updated_at"),
+      retired_at=jstring("retired_at"),
+      subject_id=jstring("subject_id"),
+      retirement_reason=jstring("retirement_reason")
+    )
+json.jb.flat.df=as.data.frame(json.jb.flat)
+
+```
+
