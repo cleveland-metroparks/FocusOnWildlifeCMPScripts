@@ -4,7 +4,7 @@ import ujson
 import datetime
 from ast import literal_eval
 from get_workflow_info import get_workflow_info, translate_non_alphanumerics, get_short_slug
-from aggregate_question_utils import breakout_anno_survey, getfrac, aggregate_questions, write_class_row
+from aggregate_question_utils import breakout_anno_survey, getfrac, aggregate_survey, write_class_row
 
 datadir        =   'C:\Users\pdl\Documents\GitHub\FocusOnWildlifeCMPScripts'
 classfile      = 'focus-on-wildlife-cleveland-metroparks-classifications_test.csv'
@@ -18,11 +18,10 @@ annofile     = classfile.replace('.csv', '_annotations_1lineeach.csv')
 outfile      = classfile.replace('.csv', '_aggregated.csv')
 outfile_huge = classfile.replace('.csv', '_aggregated_kitchensink.csv')
 
-# Entering python aggregate_survey.py 'default' should allow use of defaults
+print("There are %s arguments\n" % len(sys.argv))
+# Entering 'python aggregate_survey.py default' should allow use of defaults
 try:
-    if len(sys.argv) > 1
-        if sys.argv != "default"
-            classfile = sys.argv[1]
+   classfile_test = sys.argv[1]
 except:
    print("Usage:\n%s classfile\n  example classifications export file: %s\n" % (sys.argv[0], classfile))
    print("Optional inputs:")
@@ -35,6 +34,11 @@ except:
    print("    If you don't specify an outfile_class or outfile_agg, the filenames\n    will be based on the input classfile name.")
    print("    If you vary the project from the suggested one above, you'll need to specify workflow files.\n")
    sys.exit(0)
+
+if os.path.isfile(classfile_test):
+    classfile = classfile_test
+else:
+    print("If you entered a filename, it does not exist. Continuing with default values.") 
 
 # check for other command-line arguments
 if len(sys.argv) > 2:
