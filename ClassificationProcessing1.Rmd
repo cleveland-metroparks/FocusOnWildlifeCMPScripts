@@ -164,6 +164,8 @@ This fails and gives a second row. Need to do this as a 2 step process.
 
 ## Flatten classification report in two steps
 
+If there are multiple choices, this method makes a separate row for each choice.  This will be good for not losing humans when vehicles is also selected.  It will not combine classifications where marked antlered and non antlered deer separately.
+
 ```{r}
 # Replace this with the latest classification report
 fowcmp_class=fowcmp_class_test100
@@ -197,7 +199,14 @@ json.jb.flat=json.jb.anno.df %>% as.tbl_json(json.column = "subject_data") %>%
       subject_id=jstring("subject_id"),
       retirement_reason=jstring("retirement_reason")
     )
-json.jb.flat.df=as.data.frame(json.jb.flat)
 
+```
+
+## Calculate consensus, percent, and Peilou score for each subject
+
+```{r}
+sorted=focus_on_wildlife_cleveland_metroparks_classifications_test %>%
+  arrange(subject_ids)
+  
 ```
 
