@@ -1,4 +1,7 @@
 # .gitignore
 *.csv
+*.png
+*.pdf
+*.pyc
 BU\
 .Rproj.user
