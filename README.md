@@ -19,7 +19,7 @@ datasets that can then be used for analysis.
 * The Oxford team is working to fix aggregation through the project builder - I'm hopeful we might be able to have something built this summer, but there are no guarantees.
 
 
-## Report types, basic
+## Zooniverse report types
 
 * workflow contents - has workflow id, contents version, and question choices
 * workflows - has workflow id, workflow version, tasks, and some other stuff I don't understand fully
@@ -28,15 +28,88 @@ datasets that can then be used for analysis.
   * could be used to see what is currently linked to workflow
 * classifications - included user information and ip, workflow_id and version, created at date/time, session information, classification answers, subject data and ids
 
+## Basic generic reports
 
-## Old aggregation report
+* These should be executed in a Canopy command prompt window
+  * cd \Users\pdl\Documents\GitHub\FocusOnWildlifeCMPScripts)
+  * then execute the commands listed below
 
-* 
+### basic_project_stats.py
+
+`python basic_project_stats.py focus-on-wildlife-cleveland-metroparks-classifications_test.csv workflow_id=1432 workflow_version=478.99 --keep_allcols outfile_csv=focus-on-wildlife-cleveland-metroparks-classifications_wfid1432_v478.99.csv --remove_duplicates --keep_nonlive`
+
+Produces output like this:
+
+> Computing project stats using:
+>    infile: focus-on-wildlife-cleveland-metroparks-classifications_test.csv
+> Reading classifications from focus-on-wildlife-cleveland-metroparks-classifications_test.csv
+> Considering only workflow id 1432
+> Considering only major workflow version 478
+> Retaining all non-live classifications in analysis.
+> Found 1227 duplicate classifications (0.55 percent of total).
+> Duplicates removed from analysis (1125 unique user-subject-workflow groups).
+> 
+> Overall:
+> 
+> 221497 classifications of 25396 subjects by 3158 classifiers,
+> 1920 logged in and 1238 not logged in, from 3708 unique IP addresses.
+> 189231 classifications were from logged-in users, 32266 from not-logged-in users.
+> 
+> That's 8.72 classifications per subject on average (median = 8.0).
+> The most classified subject has 18 classifications; the least-classified subject has 1.
+> 
+> Median number of classifications per user: 18.00
+> Mean number of classifications per user: 70.14
+> 
+> Top 10 most prolific classifiers:
+> user_name
+> barclem         15347
+> martyreynard     6382
+> Giant_Sloth      5790
+> jfelix2          3921
+> jgeschke         2952
+> apmabr           2661
+> jrhansler        2206
+> auforester       1926
+> Zandra           1724
+> ramekens         1628
+> Name: created_at, dtype: int64
+> 
+> 
+> Gini coefficient for classifications by user: 0.77
+> 
+> Classifications were collected between 2017-01-05 and 2017-05-25.
+> The highest classification id considered here is 56718037.
+> 
+> File with used subset of classification info written to focus-on-wildlife-cleveland-metroparks-classifications_wfid1432_v478.99.csv .
+> File with ranked list of user classification counts written to focus-on-wildlife-cleveland-metroparks-classifications_test_nclass_byuser_ranked.csv .
+> Saved info for all classifications that have duplicates to focus-on-wildlife-cleveland-metroparks-classifications_test_duplicated_only.csv .
+
+## Modified aggregation report
+
+* Brooke has modified her aggregation report and put it here: [Weblink](https://github.com/zooniverse/Data-digging/tree/46a902c507365007d038f43fad0d295961f52a19/example_scripts/cleveland_wildlife)
+
+`python aggregate_cleveland_survey.py focus-on-wildlife-cleveland-metroparks-classifications_wfid1432_v478.99.csv`
+
+Produces:
+
+> 236894 annotations jailbroken from 221497 classifications, written to focus-on-wildlife-cleveland-metroparks-classifications_wfid1432_v478.99_annotations_1lineeach.csv as individual marks...
+> 
+> Aggregated classifications written to focus-on-wildlife-cleveland-metroparks-classifications_wfid1432_v478.99_aggregated.csv
+>   (kitchen sink version: focus-on-wildlife-cleveland-metroparks-classifications_wfid1432_v478.99_aggregated_kitchensink.csv )
+
+## Plot histogram of user classifications
+
+`python plot_user_class_hist.py focus-on-wildlife-cleveland-metroparks-classifications_test_nclass_byuser_ranked.csv`
+
+Output was some errors and 'Histograms written to nclass_hist.png and .pdf'
+
 
 
 ## Todo
-* need to find a way to recreate the aggregate report from either the classifications report
-* No clue where to even start with this
+
+* Make sense of aggregate report
+* Get Peilou score etc. from Ali's scripts
 
 
 
