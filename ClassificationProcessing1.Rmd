@@ -167,8 +167,10 @@ This fails and gives a second row. Need to do this as a 2 step process.
 If there are multiple choices, this method makes a separate row for each choice.  This will be good for not losing humans when vehicles is also selected.  It will not combine classifications where marked antlered and non antlered deer separately.
 
 ```{r}
+focus_on_wildlife_cleveland_metroparks_classifications_wfid1432_v478_99 <- read_csv("~/GitHub/FocusOnWildlifeCMPScripts/focus-on-wildlife-cleveland-metroparks-classifications_wfid1432_v478.99.csv")
+
 # Replace this with the latest classification report
-fowcmp_class=fowcmp_class_test100
+fowcmp_class=focus_on_wildlife_cleveland_metroparks_classifications_wfid1432_v478_99
 
 json.jb.anno=fowcmp_class %>% as.tbl_json(json.column = "annotations") %>%
   gather_array %>%
@@ -204,9 +206,37 @@ json.jb.flat=json.jb.anno.df %>% as.tbl_json(json.column = "subject_data") %>%
 
 ## Calculate consensus, percent, and Peilou score for each subject
 
+### Figure out how to deal with double IDs
+
+How many cases are there where the same user identified the same subject multiple times?
+
+* 14,471
+  * some of these are two different IDs,
+  * 606 were the same multiple times
+* There is no way to distinguish a subject with two different species from two repeats, except using time between IDs
+
+We need to decide how to deal with repeat IDs (probably take first)
+
 ```{r}
-sorted=focus_on_wildlife_cleveland_metroparks_classifications_test %>%
-  arrange(subject_ids)
-  
+sorted=json.jb.flat %>%
+  arrange(subject_ids,choice,user_name)
+View(sorted[,c("subject_ids","choice","user_name","classifications_count","retirement_reason")])
+
+sorted.list=aggregate(choice~subject_ids+user_name,data=json.jb.flat,c)
+dups=sorted.list[substr(sorted.list$choice,1,3)=="c(\"",]
+t_num=unlist(lapply(as.list(sorted.list$choice),length))
+range(t_num)
+t_morethanone=which(t_num>1)
+
+t_same=sorted.list$choice[t_morethanone][lapply(lapply(sorted.list$choice[t_morethanone],unique),length)==1]
+length(t_same)
 ```
 
+## Doing this in postgres
+
+### Steps needed
+
+1. break out json to get things we need
+2. figure out how to select distinct with something like https://gist.github.com/seanbehan/402ffa37838b8aa5f3035fc7b64ac93f
+  a. this will require distinguishing repeat presentations and images where there are 2 or more things IDed (see dups above)
+  
