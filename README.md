@@ -85,7 +85,9 @@ Produces output like this:
 > File with ranked list of user classification counts written to focus-on-wildlife-cleveland-metroparks-classifications_test_nclass_byuser_ranked.csv .
 > Saved info for all classifications that have duplicates to focus-on-wildlife-cleveland-metroparks-classifications_test_duplicated_only.csv .
 
-## Modified aggregation report
+* We can use this output file to run R scripts or postgres to summarize IDs and calculate Pielou scores, etc.
+
+## Modified aggregation report - this is not currently too useful
 
 * Brooke has modified her aggregation report and put it here: [Weblink](https://github.com/zooniverse/Data-digging/tree/46a902c507365007d038f43fad0d295961f52a19/example_scripts/cleveland_wildlife)
 
@@ -98,13 +100,23 @@ Produces:
 > Aggregated classifications written to focus-on-wildlife-cleveland-metroparks-classifications_wfid1432_v478.99_aggregated.csv
 >   (kitchen sink version: focus-on-wildlife-cleveland-metroparks-classifications_wfid1432_v478.99_aggregated_kitchensink.csv )
 
+* This approach mangles answers to our deer questions, among other problems
+
 ## Plot histogram of user classifications
 
 `python plot_user_class_hist.py focus-on-wildlife-cleveland-metroparks-classifications_test_nclass_byuser_ranked.csv`
 
 Output was some errors and 'Histograms written to nclass_hist.png and .pdf'
 
+## Plot time series
 
+`python active_users_timeseries.py focus-on-wildlife-cleveland-metroparks-classifications_wfid1432_v478.99.csv workflow_id=1432 workflow_version=478 focus-on-wildlife-cleveland-metroparks-classifications_wfid1432_v478.99`
+
+## User session stats
+
+`python sessions_inproj_byuser.py focus-on-wildlife-cleveland-metroparks-classifications_wfid1432_v478.99.csv`
+
+Outputs to session_stats_2017-01-05_to_2017-05-25.csv
 
 ## Todo
 
