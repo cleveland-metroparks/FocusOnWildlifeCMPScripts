@@ -1,5 +1,5 @@
 -- Name:  zooniverse_classification_nodups
--- Description:  creates table without duplicates from one workflow and version classification table from zooniverse
+-- Description:  creates materialized view without duplicates from one workflow and version classification table from zooniverse
 SELECT * FROM (
   SELECT *,
   	ROW_NUMBER() OVER(PARTITION BY subject_ids, user_name ORDER BY subject_ids asc) AS Row
