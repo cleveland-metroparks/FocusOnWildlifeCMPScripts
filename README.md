@@ -31,7 +31,7 @@ datasets that can then be used for analysis.
 ## Basic generic reports
 
 * These should be executed in a Canopy command prompt window
-  * cd \Users\pdl\Documents\GitHub\FocusOnWildlifeCMPScripts)
+  * in Canopy command shell, cd \Users\pdl\Documents\GitHub\FocusOnWildlifeCMPScripts)
   * then execute the commands listed below
 
 ### basic_project_stats.py
