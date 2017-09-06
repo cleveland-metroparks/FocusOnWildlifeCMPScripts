@@ -1,5 +1,5 @@
 -- Name:  zooniverse_classification_choices
--- Comment:  Calculate concensus choice, fraction, and evenness for each subject_ids and creates view
+-- Comment:  Splits out answers of interest from complex jsonb fields. Used to create a view for debugging.
 SELECT *,
   jsonb_array_elements(jsonb_array_elements(annotations::jsonb)->'value')->>'choice' as choice,
   jsonb_array_elements(jsonb_array_elements(annotations::jsonb)->'value')->'answers' as answers,
