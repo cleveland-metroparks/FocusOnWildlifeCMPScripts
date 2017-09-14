@@ -1,5 +1,5 @@
 -- Name:  zooniverse_classification_choices
--- Comment:  Splits out answers of interest from complex jsonb fields. Used to create a view for debugging.
+-- Comment:  Splits out answers of interest from complex jsonb fields from zooniverse_classification_nodups view. Used to create a view for debugging.
 SELECT a.workflow_id,
 	a.workflow_name,
 	a.metadata,

@@ -1,9 +1,8 @@
 -- Concensus table
 -- Made a view of this also to allow better QA/QC
 -- Name:  zoon_class_concensus
--- Comment: table with choices, answers, and subject data split out of the nodup table
+-- Comment: table with concensus choices, fraction, and peilou score from the zooniverse_classification_choices view
 SELECT subject_ids,
-  created_at,
   choice,
   num_classifications,
   rn,
