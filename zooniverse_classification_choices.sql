@@ -2,6 +2,7 @@
 -- Comment:  Splits out answers of interest from complex jsonb fields from zooniverse_classification_nodups view. Used to create a view for debugging.
 SELECT a.workflow_id,
 	a.workflow_name,
+	a.workflow_version,
 	a.metadata,
 	a.subject_ids,
 	jsonb_array_elements(jsonb_array_elements(annotations::jsonb)->'value')->>'choice' as choice,
