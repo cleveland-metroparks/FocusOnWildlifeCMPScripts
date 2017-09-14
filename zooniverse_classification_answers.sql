@@ -1,5 +1,5 @@
 -- Name:  zoon_class_number_of_animals
--- Description:  table with counts for number of animals to be used as a view
+-- Comments:  table with counts for number of animals to be used as a view
 -- Note the extra item in the partition by to get the rank within choice, within subject_ids 
 --  for when there are two different estimates of number_of_animals for one choice.  Also note
 --  count(number_of_animals) counts number of votes for that count
