@@ -3,6 +3,7 @@
 -- Name:  zoon_class_concensus
 -- Comment: table with choices, answers, and subject data split out of the nodup table
 SELECT subject_ids,
+  created_at,
   choice,
   num_classifications,
   rn,
