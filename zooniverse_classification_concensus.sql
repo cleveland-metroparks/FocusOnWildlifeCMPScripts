@@ -23,7 +23,8 @@ SELECT subject_ids,
     max_tie_row_no,
     CASE WHEN max_tie_row_no = 1 THEN 1
       WHEN max_tie_row_no > 1 AND row_no = 1 AND choice = 'NOTHINGTHERE' THEN 2
-      ELSE 1
+      WHEN max_tie_row_no > 1 AND row_no = 1 AND choice != 'NOTHINGTHERE' THEN 1
+      ELSE 2
       END as tie_break
     FROM(SELECT subject_ids,
         choice,
@@ -62,10 +63,10 @@ SELECT subject_ids,
             ORDER BY subject_ids) as evenness
       ORDER BY subject_ids) as ties
     ORDER BY subject_ids) as tb2
--- WHERE CASE WHEN fin.max_row_no > 1 THEN
---         fin.row_no = 2
+-- WHERE CASE WHEN tb2.max_row_no > 1 THEN
+--         tb2.row_no = 2
 --       ELSE
---         fin.row_no = 1
+--         tb2.row_no = 1
 --       END
   ORDER BY subject_ids) as fin
   WHERE fin.tie_break = 1
