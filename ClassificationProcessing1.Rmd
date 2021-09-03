@@ -11,7 +11,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Classification processing
 
-We need to "jail break" the jason fields to get data for summarizing and further processing classifications.
+*** Not used.  I do this in postgres now ***
+
+We need to "jail break" the json fields to get data for summarizing and further processing classifications.
 
 Zooniverse was developing an engine for doing this on the database.  It was in beta, but they have stopped supporting it.  We should probably develop a way to do this in postgres, so we can either dump a classification report and have a veiw that updates the view of a flatter table and or reports with consensus stats, etc.
 
@@ -239,4 +241,3 @@ length(t_same)
 1. break out json to get things we need
 2. figure out how to select distinct with something like https://gist.github.com/seanbehan/402ffa37838b8aa5f3035fc7b64ac93f
   a. this will require distinguishing repeat presentations and images where there are 2 or more things IDed (see dups above)
-  
